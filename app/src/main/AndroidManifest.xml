@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="unipu.oikt.djaranovic.etlak">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.SplashScreenActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.registracija.RegistracijaActivity"
+            android:label="@string/title_activity_registracija"/>
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.prijava.PrijavaActivity"
+            android:label="@string/title_activity_prijava" />
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.MainActivity"
+            android:label="@string/title_activity_main"/>
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.unos.UnosActivity"
+            android:label="@string/title_activity_unos" />
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.unos.UnosMasaActivity"
+            android:label="@string/title_activity_unos_masa"/>
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.dijagnoza.DijagnozaTabsActivity"
+            android:label="@string/title_activity_dijagnoza"/>
+
+        <activity
+            android:name="unipu.oikt.djaranovic.etlak.povijest.PovijestActivity"
+            android:label="@string/title_activity_povijest"/>
+
+    </application>
+
+</manifest>

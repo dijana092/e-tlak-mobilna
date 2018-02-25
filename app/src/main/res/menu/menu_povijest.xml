@@ -1,0 +1,32 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="unipu.oikt.djaranovic.etlak.povijest.PovijestActivity">
+
+    <item android:id="@+id/pocetni_menu"
+        android:title="Početna"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/unos_menu"
+        android:title="Unos krvnog tlaka"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/masa_menu"
+        android:title="Unos tjelesne mase"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/dijagnoza_menu"
+        android:title="Dijagnoza"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/logout_menu"
+        android:title="Odjava"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+</menu>
