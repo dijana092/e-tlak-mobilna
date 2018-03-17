@@ -9,9 +9,9 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp">
 
-    <com.github.mikephil.charting.charts.ScatterChart
-        android:id="@+id/chart"
+    <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/graph" />
 
 </RelativeLayout>

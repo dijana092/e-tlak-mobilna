@@ -16,10 +16,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -197,51 +198,42 @@ public class PieChartFragment extends Fragment { // prvi tab zaslona Dijagnoza, 
 
     // inicijaliziranje PieChart grafikona
     private void inicijalizirajGraf(ArrayList<KrvniTlak> list) {
-        // ArrayList sa nazivima vrijednosti krvnog tlaka
-        ArrayList<String> labels = new ArrayList<>();
         // ArrayList sa instancama određenih izmjerenih vrijednosti krvnog tlaka
-        ArrayList<Entry> entries = new ArrayList<>();
+        ArrayList<PieEntry> entries = new ArrayList<>();
 
         if (optimalan > 0) {
             optimalan = (float) Math.floor(((optimalan / brojac) * 100)+0.5);
-            entries.add(new Entry(optimalan, 0));
-            labels.add("Optimalan");
+            entries.add(new PieEntry(optimalan, "Optimalan",0));
         }
 
         if (normalan > 0) {
             normalan = (float) Math.floor(((normalan / brojac) * 100)+0.5);
-            entries.add(new Entry(normalan, 1));
-            labels.add("Normalan");
+            entries.add(new PieEntry(normalan, "Normalan",1));
         }
 
         if (povisen > 0) {
             povisen = (float) Math.floor(((povisen / brojac) * 100)+0.5);
-            entries.add(new Entry(povisen, 2));
-            labels.add("Povišen");
+            entries.add(new PieEntry(povisen, "Povišen",2));
         }
 
         if (hipertenzija1 > 0) {
             hipertenzija1 = (float) Math.floor(((hipertenzija1 / brojac) * 100)+0.5);
-            entries.add(new Entry(hipertenzija1, 3));
-            labels.add("Hipertenzija I");
+            entries.add(new PieEntry(hipertenzija1, "Hipertenzija I",3));
         }
 
         if (hipertenzija2 > 0) {
             hipertenzija2 = (float) Math.floor(((hipertenzija2 / brojac) * 100)+0.5);
-            entries.add(new Entry(hipertenzija2, 4));
-            labels.add("Hipertenzija II");
+            entries.add(new PieEntry(hipertenzija2, "Hipertenzija II",4));
         }
 
         if (hipertenzija3 > 0) {
             hipertenzija3 = (float) Math.floor(((hipertenzija3 / brojac) * 100)+0.5);
-            entries.add(new Entry(hipertenzija3, 5));
-            labels.add("Hipertenzija III");
+            entries.add(new PieEntry(hipertenzija3, "Hipertenzija III",5));
         }
 
         if (izoliranaSisHipertenzija > 0) {
             izoliranaSisHipertenzija = (float) Math.floor(((izoliranaSisHipertenzija / brojac) * 100)+0.5);
-            entries.add(new Entry(izoliranaSisHipertenzija, 6));
-            labels.add("Izoliran");
+            entries.add(new PieEntry(izoliranaSisHipertenzija, "Izoliran",6));
         }
 
         if (entries.size() > 0) {
@@ -249,14 +241,16 @@ public class PieChartFragment extends Fragment { // prvi tab zaslona Dijagnoza, 
             PieDataSet dataset = new PieDataSet(entries, "");
 
             // skup labela, vrijednosti za PieChart
-            PieData data = new PieData(labels, dataset);
+            PieData data = new PieData(dataset);
 
             // postavljanje podataka i opisa
             pieChart.setDrawSliceText(false);
             pieChart.setCenterText("%");
             pieChart.setCenterTextColor(Color.parseColor("#972C39"));
             pieChart.setCenterTextSize(25);
-            pieChart.setDescription("");
+            Description description = new Description();
+            description.setText("");
+            pieChart.setDescription(description);
 
             // postavljanje boja i stila grafikona
             dataset.setColors(new int[]{getResources().getColor(R.color.color_1), getResources().getColor(R.color.color_2),

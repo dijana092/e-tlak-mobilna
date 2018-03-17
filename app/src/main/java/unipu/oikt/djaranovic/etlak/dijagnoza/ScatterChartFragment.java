@@ -1,11 +1,13 @@
 package unipu.oikt.djaranovic.etlak.dijagnoza;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -14,7 +16,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.numetriclabz.numandroidcharts.ChartData;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.PointsGraphSeries;
+import com.jjoe64.graphview.series.Series;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import unipu.oikt.djaranovic.etlak.R;
@@ -31,14 +37,23 @@ import unipu.oikt.djaranovic.etlak.utils.DataHelper;
 
 public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagnoza, 'raspršeni' prikaz
 
-    // privatne varijable
-    private ScatterChart scatterChart;
+    // privatna varijabla
     private DataHelper helper;
 
     public ScatterChartFragment() {
         // prazan javni konstruktor
     }
 
+    // dodavanje PointsGraphSeries-a, DataPoint tip
+    PointsGraphSeries<DataPoint> xySeries;
+
+    PointsGraphSeries<DataPoint> onClickSeries;
+
+    // kreiranje GraphView objekta
+    GraphView mScatterPlot;
+
+    // globalni xyValueArray
+    ArrayList<XYValue> xyValueArray;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,9 +70,7 @@ public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagn
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        scatterChart = (ScatterChart) getView().findViewById(R.id.chart);
-        // poruka ukoliko nema podataka za grafikon
-        scatterChart.setNoDataText("");
+        mScatterPlot = (GraphView) getView().findViewById(R.id.graph);
     }
 
 
@@ -122,74 +135,123 @@ public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagn
             @Override
             public void onRequestFinished(Request<Object> request) {
                 // ukoliko nema podataka, prekid
-                if(list.isEmpty()) return;
+                if (list.isEmpty()) return;
                 inicijalizirajGraf(list);
             }
         });
     }
 
 
-    /*
-     ScatterChart:
-     x-os: dijastolički
-     y-os: sistolički
-    */
+    // metoda za kreiranje 'raspršenog' prikaza
+    private void createScatterPlot() {
+        xySeries.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+                // deklariranje novih serija
+                onClickSeries = new PointsGraphSeries<>();
+                onClickSeries.appendData(new DataPoint(dataPoint.getX(),dataPoint.getY()),true, 100);
+                onClickSeries.setShape(PointsGraphSeries.Shape.RECTANGLE);
+                onClickSeries.setColor(Color.RED);
+                onClickSeries.setSize(25f);
+                mScatterPlot.removeAllSeries();
+                mScatterPlot.addSeries(onClickSeries);
 
-    // inicijalizacija ScatterChart grafikona
+                toastMessage("SYS = " + Math.round(dataPoint.getY()) + "\n" +
+                        "DIA = " + Math.round(dataPoint.getX()) );
+
+                createScatterPlot();
+            }
+        });
+
+        // postavljanje obilježja
+        xySeries.setShape(PointsGraphSeries.Shape.RECTANGLE);
+        xySeries.setColor(Color.BLUE);
+        xySeries.setSize(20f);
+
+        // 'Scrollable' and 'Scalable' obilježje osi
+        mScatterPlot.getViewport().setScalable(true);
+        mScatterPlot.getViewport().setScalableY(true);
+        mScatterPlot.getViewport().setScrollable(true);
+        mScatterPlot.getViewport().setScrollableY(true);
+
+        // postavljanje granica na y-osi
+        mScatterPlot.getViewport().setYAxisBoundsManual(true);
+        mScatterPlot.getViewport().setMaxY(150);
+        mScatterPlot.getViewport().setMinY(60);
+
+        // postavljanje granica na x-osi
+        mScatterPlot.getViewport().setXAxisBoundsManual(true);
+        mScatterPlot.getViewport().setMaxX(150);
+        mScatterPlot.getViewport().setMinX(60);
+
+        mScatterPlot.addSeries(xySeries);
+    }
+
+
+    // metoda za sortiranje ArrayList<XYValue> uzimajući u obzir x vrijednosti
+    private ArrayList<XYValue> sortArray(ArrayList<XYValue> array){
+        // sortiranje xy-vrijednosti uzlazno i njihovo pripremanje za PointsGraphSeries<DataSet>
+        int factor = Integer.parseInt(String.valueOf(Math.round(Math.pow(array.size(),2))));
+        int m = array.size()-1;
+        int count = 0;
+
+        while(true){
+            m--;
+            if(m <= 0){
+                m = array.size() - 1;
+            }
+            try{
+                double tempY = array.get(m-1).getY();
+                double tempX = array.get(m-1).getX();
+                if(tempX > array.get(m).getX() ){
+                    array.get(m-1).setY(array.get(m).getY());
+                    array.get(m).setY(tempY);
+                    array.get(m-1).setX(array.get(m).getX());
+                    array.get(m).setX(tempX);
+                }
+                else if(tempY == array.get(m).getY()){
+                    count++;
+                }
+                else if(array.get(m).getX() > array.get(m-1).getX()){
+                    count++;
+                }
+                if(count == factor ){
+                    break;
+                }
+            }catch(ArrayIndexOutOfBoundsException e){
+                break;
+            }
+        }
+        return array;
+    }
+
+
+    // metoda za poruku o točnoj vrijednosti
+    private void toastMessage(String message){
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    // inicijalizacija ScatterChart grafikona, x-os: dijastolički tlak, y-os: sistolički tlak
     private void inicijalizirajGraf(ArrayList<KrvniTlak> list) {
-        /*DBHelper dbHelper = new DBHelper(getActivity());
-        Cursor res = dbHelper.getAllDataByDiastolic();*/
 
-        // ArrayList sa nazivima
-        ArrayList<Entry> entries = new ArrayList<>();
-        // ArrayList sa instancama
-        ArrayList<String> labels = new ArrayList<>();
+        xySeries = new PointsGraphSeries<>();
 
-        /*int labelIndex = 0;
-        while (res.moveToNext()) {
-            entries.add(new Entry((float)res.getInt(1), labelIndex));
-            labels.add(String.valueOf(res.getInt(2)));
-            labelIndex++;
-        }*/
-
-        for(int i=0; i<list.size(); i++) {
-            // prolazak kroz unose iz baze podataka i pripremanje za prikaz na grafikonu
+        // generiranje liste s x i y-osi
+        xyValueArray = new ArrayList<>();
+        for(int i = 0; i<list.size(); i++){
             KrvniTlak tlak = list.get(i);
-            Entry entry = new Entry(Float.parseFloat(tlak.getSistolicki()), i);
-            entries.add(entry);
-            labels.add(tlak.getDijastolicki());
+            xyValueArray.add( new XYValue(Integer.parseInt(tlak.getDijastolicki()), Integer.parseInt(tlak.getSistolicki())));
+        }
+        // sortiranje uzlaznim redoslijedom
+        xyValueArray = sortArray(xyValueArray);
+        // dodavanje podataka serijama
+        for(int i = 0;i <xyValueArray.size(); i++){
+            double x = xyValueArray.get(i).getX();
+            double y = xyValueArray.get(i).getY();
+            xySeries.appendData(new DataPoint(x,y),true, 1000);
         }
 
-        if (entries.size() > 0) {
-            // postavljanje opisa, boja, izgleda i animacija grafikona
-            ScatterDataSet dataSet = new ScatterDataSet(entries, "");
-            ScatterData data = new ScatterData(labels, dataSet);
-
-            scatterChart.setDescription("x - DIA, y - SYS");
-            scatterChart.setDescriptionTextSize(23);
-            scatterChart.setDescriptionColor(Color.parseColor("#972C39"));
-            scatterChart.setDescriptionPosition(625,1250);
-
-            dataSet.setColor(Color.parseColor("#CD6155"));
-            dataSet.setScatterShapeSize(15);
-            dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-            dataSet.setDrawValues(false);
-
-            XAxis xAxis = scatterChart.getXAxis();
-            xAxis.setTextSize(23);
-            xAxis.setTextColor(Color.parseColor("#972C39"));
-            YAxis leftAxis = scatterChart.getAxisLeft();
-            YAxis rightAxis = scatterChart.getAxisRight();
-            leftAxis.setTextSize(23);
-            leftAxis.setTextColor(Color.parseColor("#972C39"));
-            rightAxis.setTextSize(23);
-            rightAxis.setTextColor(Color.parseColor("#972C39"));
-
-            scatterChart.getLegend().setEnabled(false);
-            scatterChart.animateY(1000);
-
-            // učitavanje podataka nakon što su sve opcije podešene
-            scatterChart.setData(data);
-        }
+        createScatterPlot();
     }
 }
