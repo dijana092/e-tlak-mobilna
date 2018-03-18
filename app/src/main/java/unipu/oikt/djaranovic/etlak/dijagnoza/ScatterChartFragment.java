@@ -65,6 +65,27 @@ public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagn
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mScatterPlot = (GraphView) getView().findViewById(R.id.graph);
+
+        // postavljanje granica na y-osi
+        mScatterPlot.getViewport().setYAxisBoundsManual(true);
+        mScatterPlot.getViewport().setMaxY(190);
+        mScatterPlot.getViewport().setMinY(60);
+
+        // postavljanje granica na x-osi
+        mScatterPlot.getViewport().setXAxisBoundsManual(true);
+        mScatterPlot.getViewport().setMaxX(130);
+        mScatterPlot.getViewport().setMinX(60);
+
+        // ostala obilježja
+        mScatterPlot.getGridLabelRenderer().setTextSize(50);
+        mScatterPlot.getGridLabelRenderer().setVerticalLabelsColor(Color.parseColor("#972C39"));
+        mScatterPlot.getGridLabelRenderer().setHorizontalLabelsColor(Color.parseColor("#972C39"));
+        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitle("SYS");
+        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitleTextSize(50);
+        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitle("DIA");
+        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitleTextSize(50);
+        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitleColor(Color.parseColor("#972C39"));
+        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.parseColor("#972C39"));
     }
 
 
@@ -142,27 +163,6 @@ public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagn
         xySeries.setShape(PointsGraphSeries.Shape.POINT);
         xySeries.setColor(Color.parseColor("#ffffff"));
         xySeries.setSize(15);
-
-        // postavljanje granica na y-osi
-        mScatterPlot.getViewport().setYAxisBoundsManual(true);
-        mScatterPlot.getViewport().setMaxY(190);
-        mScatterPlot.getViewport().setMinY(60);
-
-        // postavljanje granica na x-osi
-        mScatterPlot.getViewport().setXAxisBoundsManual(true);
-        mScatterPlot.getViewport().setMaxX(130);
-        mScatterPlot.getViewport().setMinX(60);
-
-        // ostala obilježja
-        mScatterPlot.getGridLabelRenderer().setTextSize(50);
-        mScatterPlot.getGridLabelRenderer().setVerticalLabelsColor(Color.parseColor("#972C39"));
-        mScatterPlot.getGridLabelRenderer().setHorizontalLabelsColor(Color.parseColor("#972C39"));
-        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitle("SYS");
-        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitleTextSize(50);
-        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitle("DIA");
-        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitleTextSize(50);
-        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitleColor(Color.parseColor("#972C39"));
-        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.parseColor("#972C39"));
 
         mScatterPlot.addSeries(xySeries);
     }
