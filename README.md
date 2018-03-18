@@ -20,11 +20,7 @@ Sveučilišni diplomski studij Informatike
 
 
 
-![mob_app_1](https://user-images.githubusercontent.com/33299469/37569380-d8ae86a6-2ae1-11e8-91e5-dcfb893b6c90.png)
-
-![mob_app_2](https://user-images.githubusercontent.com/33299469/37569382-dcfd7a64-2ae1-11e8-8b85-582a0ea1843a.png)
-
-![mob_app_4](https://user-images.githubusercontent.com/33299469/37569385-e175b962-2ae1-11e8-94f6-07b84eafc0cb.png)
+![mob_app_1](https://user-images.githubusercontent.com/33299469/37569380-d8ae86a6-2ae1-11e8-91e5-dcfb893b6c90.png) ![mob_app_2](https://user-images.githubusercontent.com/33299469/37569382-dcfd7a64-2ae1-11e8-8b85-582a0ea1843a.png) ![mob_app_4](https://user-images.githubusercontent.com/33299469/37569385-e175b962-2ae1-11e8-94f6-07b84eafc0cb.png)
 
 ![mob_app_5](https://user-images.githubusercontent.com/33299469/37569387-e320dc1a-2ae1-11e8-8988-8d80e908f9be.png)
 
