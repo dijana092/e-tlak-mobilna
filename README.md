@@ -30,6 +30,10 @@ Sveučilišni diplomski studij Informatike
 
 
 
+![mob_app_3](https://user-images.githubusercontent.com/33299469/37569449-b845b17c-2ae2-11e8-9648-b49e8960a8b3.png)
+
+
+
 ![mob_app_4](https://user-images.githubusercontent.com/33299469/37569385-e175b962-2ae1-11e8-94f6-07b84eafc0cb.png)
 
 
