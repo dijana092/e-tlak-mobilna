@@ -1,6 +1,6 @@
 package unipu.oikt.djaranovic.etlak.dijagnoza;
 
-public class XYValue { // pomoćna klasa za formatiranje, određivanje vrijednosti X i Y osi kod 'raspršenog' prikaza
+public class XYValue { // pomoćna klasa za određivanje, formatiranje vrijednosti X i Y osi kod 'raspršenog' prikaza
 
     private double x;
     private double y;
