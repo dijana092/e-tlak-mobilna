@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -18,10 +17,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.PointsGraphSeries;
-import com.jjoe64.graphview.series.Series;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,10 +40,8 @@ public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagn
         // prazan javni konstruktor
     }
 
-    // dodavanje PointsGraphSeries-a, DataPoint tip
+    // dodavanje PointsGraphSeries, DataPoint tip
     PointsGraphSeries<DataPoint> xySeries;
-
-    PointsGraphSeries<DataPoint> onClickSeries;
 
     // kreiranje GraphView objekta
     GraphView mScatterPlot;
@@ -144,45 +138,31 @@ public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagn
 
     // metoda za kreiranje 'raspršenog' prikaza
     private void createScatterPlot() {
-        xySeries.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                // deklariranje novih serija
-                onClickSeries = new PointsGraphSeries<>();
-                onClickSeries.appendData(new DataPoint(dataPoint.getX(),dataPoint.getY()),true, 100);
-                onClickSeries.setShape(PointsGraphSeries.Shape.RECTANGLE);
-                onClickSeries.setColor(Color.RED);
-                onClickSeries.setSize(25f);
-                mScatterPlot.removeAllSeries();
-                mScatterPlot.addSeries(onClickSeries);
-
-                toastMessage("SYS = " + Math.round(dataPoint.getY()) + "\n" +
-                        "DIA = " + Math.round(dataPoint.getX()) );
-
-                createScatterPlot();
-            }
-        });
-
         // postavljanje obilježja
-        xySeries.setShape(PointsGraphSeries.Shape.RECTANGLE);
-        xySeries.setColor(Color.BLUE);
-        xySeries.setSize(20f);
-
-        // 'Scrollable' and 'Scalable' obilježje osi
-        mScatterPlot.getViewport().setScalable(true);
-        mScatterPlot.getViewport().setScalableY(true);
-        mScatterPlot.getViewport().setScrollable(true);
-        mScatterPlot.getViewport().setScrollableY(true);
+        xySeries.setShape(PointsGraphSeries.Shape.POINT);
+        xySeries.setColor(Color.parseColor("#ffffff"));
+        xySeries.setSize(15);
 
         // postavljanje granica na y-osi
         mScatterPlot.getViewport().setYAxisBoundsManual(true);
-        mScatterPlot.getViewport().setMaxY(150);
+        mScatterPlot.getViewport().setMaxY(190);
         mScatterPlot.getViewport().setMinY(60);
 
         // postavljanje granica na x-osi
         mScatterPlot.getViewport().setXAxisBoundsManual(true);
-        mScatterPlot.getViewport().setMaxX(150);
+        mScatterPlot.getViewport().setMaxX(130);
         mScatterPlot.getViewport().setMinX(60);
+
+        // ostala obilježja
+        mScatterPlot.getGridLabelRenderer().setTextSize(50);
+        mScatterPlot.getGridLabelRenderer().setVerticalLabelsColor(Color.parseColor("#972C39"));
+        mScatterPlot.getGridLabelRenderer().setHorizontalLabelsColor(Color.parseColor("#972C39"));
+        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitle("SYS");
+        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitleTextSize(50);
+        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitle("DIA");
+        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitleTextSize(50);
+        mScatterPlot.getGridLabelRenderer().setVerticalAxisTitleColor(Color.parseColor("#972C39"));
+        mScatterPlot.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.parseColor("#972C39"));
 
         mScatterPlot.addSeries(xySeries);
     }
@@ -223,12 +203,6 @@ public class ScatterChartFragment extends Fragment { // drugi tab zaslona Dijagn
             }
         }
         return array;
-    }
-
-
-    // metoda za poruku o točnoj vrijednosti
-    private void toastMessage(String message){
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
 
